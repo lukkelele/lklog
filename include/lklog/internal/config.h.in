@@ -1,0 +1,5 @@
+#pragma once
+
+#define LKLOG_PROJECT_DIR  "@LKLOG_PROJECT_DIR@"
+#define LKLOG_LOGS_DIR     LKLOG_PROJECT_DIR "/logs"
+
