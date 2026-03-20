@@ -3,7 +3,9 @@
 
 #include "test_module.h"
 
+#if MODULE_DECLARED && !MODULE_DEFINED_IN_TEST_MODULE
 LKLOG_MODULE_DEFINE(TestLogger);
+#endif
 
 static void test_log_macros_all_levels();
 static void test_log_macros_all_levels_with_tag();
@@ -21,10 +23,12 @@ int main(int argc, char** argv)
 	test_log_println();
 
 	test_module();
-	test_module_log_from_other_file();
 
 	LKLOG_MOD_INFO("Hello");
 	LKLOG_MOD_INFO("Hello {}", "Lukas");
+	PRINTLN("");
+
+	test_module_log_from_other_file();
 
 	return 0;
 }
