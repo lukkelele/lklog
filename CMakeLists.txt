@@ -6,6 +6,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 option(LKLOG_ENABLE_ASSERT "Enable assert" OFF)
 option(LKLOG_BUILD_TESTS "Build tests" ON)
 option(LKLOG_STD_PRINT "Use std::print" ON)
+option(LKLOG_INTERNAL_DEBUG "Enable internal debug logs" OFF)
 
 if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Build type" FORCE)
@@ -27,8 +28,10 @@ else()
 	endif()
 endif()
 
+set(LKLOG_DEBUG OFF)
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(LKLOG_ENABLE_ASSERT ON)
+	set(LKLOG_DEBUG ON)
 endif()
 
 
@@ -37,7 +40,7 @@ endif()
 #-------------------------------------------------------------------
 set(HEADER_FILES
 	include/lklog/lklog.h
-	include/lklog/logger.h
+	include/lklog/log.h
 	include/lklog/internal/ansi_color.h
 	include/lklog/internal/context.h
 	include/lklog/internal/core.h
@@ -48,7 +51,7 @@ set(HEADER_FILES
 )
 set(SOURCE_FILES
 	src/lklog.cpp
-	src/logger.cpp
+	src/log.cpp
 	src/utility.cpp
 )
 
@@ -60,19 +63,23 @@ target_include_directories(${LKLOG_TARGET} PUBLIC include)
 target_include_directories(${LKLOG_TARGET} PRIVATE
 	include/lklog
 )
-target_compile_definitions(${LKLOG_TARGET} PRIVATE 
-	LKLOG_STD_PRINT=${LKLOG_STD_PRINT}
-)
+
+if (LKLOG_INTERNAL_DEBUG)
+    target_compile_definitions(${LKLOG_TARGET} PRIVATE LKLOG_INTERNAL_DEBUG)
+endif()
+
+if (LKLOG_STD_PRINT)
+    target_compile_definitions(${LKLOG_TARGET} PRIVATE LKLOG_STD_PRINT)
+endif()
 
 
 #-------------------------------------------------------------------
 # Configuration.
 #-------------------------------------------------------------------
 if (MSVC)
-	set(LKLOG_COMPILER_MSVC ON)
 	target_compile_definitions(${LKLOG_TARGET} PRIVATE
-		LKLOG_COMPILER_MSVC
-		__LKLOG_VA_OPT # /Zc:preprocessor
+		_LKLOG_COMPILER_MSVC
+		_LKLOG_VA_OPT # /Zc:preprocessor
 		_CRT_SECURE_NO_WARNINGS
 	)
 
@@ -95,20 +102,18 @@ if (MSVC)
 		/wd26813  # 'Use bitwise and'
 	)
 elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-	set(LKLOG_COMPILER_GCC ON)
 	target_compile_definitions(${LKLOG_TARGET} PRIVATE
-		LKLOG_COMPILER_GCC
-		__LKLOG_VA_OPT
+		_LKLOG_COMPILER_GCC
+		_LKLOG_VA_OPT
 	)
 	target_compile_options(${LKLOG_TARGET} PRIVATE
 		-Wno-format-security
 		-Wno-format
 	)
 elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-	set(LKLOG_COMPILER_CLANG ON)
 	target_compile_definitions(${LKLOG_TARGET} PRIVATE
-		LKLOG_COMPILER_CLANG
-		__LKLOG_VA_OPT
+		_LKLOG_COMPILER_CLANG
+		_LKLOG_VA_OPT
 	)
 	target_compile_options(${LKLOG_TARGET} PRIVATE
 		-Wno-format-security
