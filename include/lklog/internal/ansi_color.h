@@ -1,44 +1,47 @@
 #pragma once
 
-/**
- * ANSI colors. 
- */
+#include <string_view>
 
-#define LKLOG_ANSI_COLOR_RESET              "\033[0m"
+namespace lklog::internal::ansi_color {
 
-/* Foreground Colors */
-#define LKLOG_ANSI_COLOR_BLACK              "\033[30m"
-#define LKLOG_ANSI_COLOR_RED                "\033[31m"
-#define LKLOG_ANSI_COLOR_GREEN              "\033[32m"
-#define LKLOG_ANSI_COLOR_YELLOW             "\033[33m"
-#define LKLOG_ANSI_COLOR_BLUE               "\033[34m"
-#define LKLOG_ANSI_COLOR_MAGENTA            "\033[35m"
-#define LKLOG_ANSI_COLOR_CYAN               "\033[36m"
-#define LKLOG_ANSI_COLOR_WHITE              "\033[37m"
-#define LKLOG_ANSI_COLOR_BRIGHT_BLACK       "\033[90m"
-#define LKLOG_ANSI_COLOR_BRIGHT_RED         "\033[91m"
-#define LKLOG_ANSI_COLOR_BRIGHT_GREEN       "\033[92m"
-#define LKLOG_ANSI_COLOR_BRIGHT_YELLOW      "\033[93m"
-#define LKLOG_ANSI_COLOR_BRIGHT_BLUE        "\033[94m"
-#define LKLOG_ANSI_COLOR_BRIGHT_MAGENTA     "\033[95m"
-#define LKLOG_ANSI_COLOR_BRIGHT_CYAN        "\033[96m"
-#define LKLOG_ANSI_COLOR_BRIGHT_WHITE       "\033[97m"
+	inline constexpr std::string_view reset = "\033[0m";
 
-/* Background Colors */
-#define LKLOG_ANSI_COLOR_BG_BLACK           "\033[40m"
-#define LKLOG_ANSI_COLOR_BG_RED             "\033[41m"
-#define LKLOG_ANSI_COLOR_BG_GREEN           "\033[42m"
-#define LKLOG_ANSI_COLOR_BG_YELLOW          "\033[43m"
-#define LKLOG_ANSI_COLOR_BG_BLUE            "\033[44m"
-#define LKLOG_ANSI_COLOR_BG_MAGENTA         "\033[45m"
-#define LKLOG_ANSI_COLOR_BG_CYAN            "\033[46m"
-#define LKLOG_ANSI_COLOR_BG_WHITE           "\033[47m"
-#define LKLOG_ANSI_COLOR_BG_BRIGHT_BLACK    "\033[100m"
-#define LKLOG_ANSI_COLOR_BG_BRIGHT_RED      "\033[101m"
-#define LKLOG_ANSI_COLOR_BG_BRIGHT_GREEN    "\033[102m"
-#define LKLOG_ANSI_COLOR_BG_BRIGHT_YELLOW   "\033[103m"
-#define LKLOG_ANSI_COLOR_BG_BRIGHT_BLUE     "\033[104m"
-#define LKLOG_ANSI_COLOR_BG_BRIGHT_MAGENTA  "\033[105m"
-#define LKLOG_ANSI_COLOR_BG_BRIGHT_CYAN     "\033[106m"
-#define LKLOG_ANSI_COLOR_BG_BRIGHT_WHITE    "\033[107m"
+	namespace fg {
+		inline constexpr std::string_view black = "\033[30m";
+		inline constexpr std::string_view red = "\033[31m";
+		inline constexpr std::string_view green = "\033[32m";
+		inline constexpr std::string_view yellow = "\033[33m";
+		inline constexpr std::string_view blue = "\033[34m";
+		inline constexpr std::string_view magenta = "\033[35m";
+		inline constexpr std::string_view cyan = "\033[36m";
+		inline constexpr std::string_view white = "\033[37m";
+		inline constexpr std::string_view bright_black = "\033[90m";
+		inline constexpr std::string_view bright_red = "\033[91m";
+		inline constexpr std::string_view bright_green = "\033[92m";
+		inline constexpr std::string_view bright_yellow = "\033[93m";
+		inline constexpr std::string_view bright_blue = "\033[94m";
+		inline constexpr std::string_view bright_magenta = "\033[95m";
+		inline constexpr std::string_view bright_cyan = "\033[96m";
+		inline constexpr std::string_view bright_white = "\033[97m";
+	}
 
+	namespace bg {
+		inline constexpr std::string_view black = "\033[40m";
+		inline constexpr std::string_view red = "\033[41m";
+		inline constexpr std::string_view green = "\033[42m";
+		inline constexpr std::string_view yellow = "\033[43m";
+		inline constexpr std::string_view blue = "\033[44m";
+		inline constexpr std::string_view magenta = "\033[45m";
+		inline constexpr std::string_view cyan = "\033[46m";
+		inline constexpr std::string_view white = "\033[47m";
+		inline constexpr std::string_view bright_black = "\033[100m";
+		inline constexpr std::string_view bright_red = "\033[101m";
+		inline constexpr std::string_view bright_green = "\033[102m";
+		inline constexpr std::string_view bright_yellow = "\033[103m";
+		inline constexpr std::string_view bright_blue = "\033[104m";
+		inline constexpr std::string_view bright_magenta = "\033[105m";
+		inline constexpr std::string_view bright_cyan = "\033[106m";
+		inline constexpr std::string_view bright_white = "\033[107m";
+	}
+
+}

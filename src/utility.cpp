@@ -6,6 +6,17 @@
 
 namespace lklog::internal {
 
+	std::string current_timestamp(std::string_view format)
+	{
+		using namespace std::chrono;
+		time_point<system_clock> now = system_clock::now();
+		std::time_t time = system_clock::to_time_t(now);
+
+		std::stringstream stream;
+		stream << std::put_time(std::localtime(&time), format.data());
+		return stream.str();
+	}
+
 	/** Assuming the log files are formatted with a timestamp. */
 	bool compare_logfiles(const std::filesystem::directory_entry& a, const std::filesystem::directory_entry& b)
 	{
@@ -59,21 +70,5 @@ namespace lklog::internal {
 				}
 			}
 		}
-	}
-
-	/**
-	 * Might remove this if not used in the logger instance.
-	 */
-	[[maybe_unused]] static spdlog::level::level_enum to_spdlog_level(const level level)
-	{
-		switch (level) {
-			case level::trace:   return spdlog::level::trace;
-			case level::debug:   return spdlog::level::debug;
-			case level::info:	 return spdlog::level::info;
-			case level::warn:    return spdlog::level::warn;
-			case level::error:	 return spdlog::level::err;
-			case level::fatal:	 return spdlog::level::critical;
-		}
-		return spdlog::level::info;
 	}
 }

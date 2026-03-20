@@ -6,7 +6,7 @@
 #include "lklog_config.h"
 
 namespace lklog::internal {
-	struct context 
+	struct context
 	{
 		static constexpr std::string_view filename = "lklog";
 		std::string logfile;

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "level.h"
-#include "logger.h"
+#include "internal/module.h"
+#include "log.h"
 
 namespace lklog {
-	
+
 	void init(level level = level::info);
 
 }
