@@ -1,34 +1,75 @@
 #include <cstddef>
 #include <print>
 
-#include <lklog/lklog.h>
+#include "test_module.h"
+
+LKLOG_MODULE_DEFINE(TestLogger);
+
+static void test_log_macros_all_levels();
+static void test_log_macros_all_levels_with_tag();
+static void test_log_all_levels();
+static void test_log_println();
+static void test_module();
 
 int main(int argc, char** argv)
 {
 	lklog::init(lklog::level::trace);
 
+	test_log_macros_all_levels();
+	test_log_macros_all_levels_with_tag();
+	test_log_all_levels();
+	test_log_println();
+
+	test_module();
+	test_module_log_from_other_file();
+
+	LKLOG_MOD_INFO("Hello");
+	LKLOG_MOD_INFO("Hello {}", "Lukas");
+
+	return 0;
+}
+
+static void test_log_macros_all_levels()
+{
 	LKLOG_TRACE("trace");
 	LKLOG_DEBUG("debug");
 	LKLOG_INFO("info");
 	LKLOG_WARN("warn");
 	LKLOG_ERROR("error");
-
-	std::println("\n");
-
-	LKLOG_TRACE_TAG("module", "trace");
-	LKLOG_DEBUG_TAG("module", "debug");
-	LKLOG_INFO_TAG("module", "info");
-	LKLOG_WARN_TAG("module", "warn");
-	LKLOG_ERROR_TAG("module", "error");
-	LKLOG_ERROR_TAG("module", "error");
-
-	std::println("\n");
-
-	lklog::logger::println("hejsan");
-	lklog::logger::println("hejsan {}", "hoppsan");
-	lklog::logger::println("hejsan {} {}", "hoppsan", "ookej");
-	lklog::logger::println("hejsan {} {}", "hoppsan", 123);
-	lklog::logger::println("hejsan {} {}", "hoppsan", 4 * 5);
-
-	return 0;
+	LKLOG_FATAL("error");
+	PRINTLN("");
 }
+
+static void test_log_macros_all_levels_with_tag()
+{
+	LKLOG_TRACE_TAG("tag", "trace");
+	LKLOG_DEBUG_TAG("tag", "debug");
+	LKLOG_INFO_TAG("tag", "info");
+	LKLOG_WARN_TAG("tag", "warn");
+	LKLOG_ERROR_TAG("tag", "error");
+	LKLOG_FATAL_TAG("tag", "fatal");
+	PRINTLN("");
+}
+
+static void test_log_all_levels()
+{
+	lklog::log::info("info log");
+	PRINTLN("");
+}
+
+static void test_log_println()
+{
+	lklog::log::println("message");
+	lklog::log::println("message with some {}", "data");
+	lklog::log::println("msg {} {}", "one", 2);
+	lklog::log::println("println {} {}", 123, 2.0f);
+	lklog::log::println("last print {} {}", "for sure", 4 * 5);
+	PRINTLN("");
+}
+
+static void test_module()
+{
+	constexpr auto loc = std::source_location::current();
+	LKLOG_MOD_INFO("logging from -> {}:{}", loc.file_name(), loc.line());
+}
+
