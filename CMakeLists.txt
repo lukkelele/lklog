@@ -78,9 +78,11 @@ endif()
 #-------------------------------------------------------------------
 if (MSVC)
 	target_compile_definitions(${LKLOG_TARGET} PRIVATE
+		_CRT_SECURE_NO_WARNINGS
+	)
+	target_compile_definitions(${LKLOG_TARGET} PUBLIC
 		_LKLOG_COMPILER_MSVC
 		_LKLOG_VA_OPT # /Zc:preprocessor
-		_CRT_SECURE_NO_WARNINGS
 	)
 
 	target_compile_options(${LKLOG_TARGET} PUBLIC
@@ -102,7 +104,7 @@ if (MSVC)
 		/wd26813  # 'Use bitwise and'
 	)
 elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-	target_compile_definitions(${LKLOG_TARGET} PRIVATE
+	target_compile_definitions(${LKLOG_TARGET} PUBLIC
 		_LKLOG_COMPILER_GCC
 		_LKLOG_VA_OPT
 	)
@@ -111,7 +113,7 @@ elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
 		-Wno-format
 	)
 elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-	target_compile_definitions(${LKLOG_TARGET} PRIVATE
+	target_compile_definitions(${LKLOG_TARGET} PUBLIC
 		_LKLOG_COMPILER_CLANG
 		_LKLOG_VA_OPT
 	)
