@@ -32,9 +32,13 @@ BreakBeforeBraces: Custom
 ########################################
 ### clang-format 22
 # BreakAfterOpenBracketBracedList: true
+# BreakBeforeCloseBracketBracedList: true
 # BreakAfterOpenBracketFunction: false
+# BreakBeforeCloseBracketFunction: true
 # BreakAfterOpenBracketIf: false
+# BreakBeforeCloseBracketIf: true
 # BreakAfterOpenBracketSwitch: false
+# BreakBeforeCloseBracketSwitch: true
 # NumericLiteralCase:
 #   ExponentLetter: Leave
 #   HexDigit: Lower
@@ -65,10 +69,10 @@ BreakBeforeTernaryOperators: true
 BreakConstructorInitializers: BeforeComma
 BreakStringLiterals: false
 ColumnLimit: 0
-ContinuationIndentWidth: 2
+ContinuationIndentWidth: 4
 CompactNamespaces: false
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
-Cpp11BracedListStyle: false
+Cpp11BracedListStyle: true
 EmptyLineBeforeAccessModifier: LogicalBlock
 IndentCaseBlocks: false
 IndentCaseLabels: true
