@@ -32,27 +32,26 @@ namespace lklog {
 	template<typename... Args>
 	LKLOG_INLINE void log::print_msg_with_tag(const level level, std::string_view tag, format_string<Args...> fmt, Args&&... args)
 	{
-		const std::string msg = lklog::format(fmt, std::forward<Args>(args)...);
 		auto* logger = get_logger();
 		LKLOG_ASSERT(logger);
 		switch (level) {
 			case level::trace:
-				logger->trace("[{0}] {1}", tag, msg);
+				logger->trace("[{}] {}", tag, lklog::format(fmt, std::forward<Args>(args)...));
 				break;
 			case level::debug:
-				logger->debug("[{0}] {1}", tag, msg);
+				logger->debug("[{}] {}", tag, lklog::format(fmt, std::forward<Args>(args)...));
 				break;
 			case level::info:
-				logger->info("[{0}] {1}", tag, msg);
+				logger->info("[{}] {}", tag, lklog::format(fmt, std::forward<Args>(args)...));
 				break;
 			case level::warn:
-				logger->warn("[{0}] {1}", tag, msg);
+				logger->warn("[{}] {}", tag, lklog::format(fmt, std::forward<Args>(args)...));
 				break;
 			case level::error:
-				logger->error("[{0}] {1}", tag, msg);
+				logger->error("[{}] {}", tag, lklog::format(fmt, std::forward<Args>(args)...));
 				break;
 			case level::fatal:
-				logger->critical("[{0}] {1}", tag, msg);
+				logger->critical("[{}] {}", tag, lklog::format(fmt, std::forward<Args>(args)...));
 				break;
 		}
 	}
@@ -86,12 +85,13 @@ namespace lklog {
 	template<typename... Args>
 	LKLOG_INLINE void log::print_assert_msg(std::string_view prefix, format_string<Args...> fmt, Args&&... args)
 	{
-		const std::string msg = lklog::format(fmt, std::forward<Args>(args)...);
 		if (auto logger = get_logger(); logger != nullptr) {
-			logger->error("{0}: {1}", prefix, msg);
+			logger->error("{}: {}", prefix, lklog::format(fmt, std::forward<Args>(args)...));
 		} else {
 			using namespace internal;
-			log::println("{2}{0}: {1}{3}", prefix, msg, ansi_color::bg::bright_red, ansi_color::reset);
+			log::println("{2}{0}: {1}{3}",
+				prefix, lklog::format(fmt, std::forward<Args>(args)...),
+				ansi_color::bg::bright_red, ansi_color::reset);
 		}
 	}
 

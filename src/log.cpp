@@ -20,7 +20,7 @@ namespace lklog {
 	{
 		auto formatter = std::make_unique<spdlog::pattern_formatter>();
 		formatter->add_flag<lklog::internal::level_name_formatter>('L');
-		formatter->set_pattern("%^[%T] [%-7L] %v%$");
+		formatter->set_pattern("%^[%T] [%L] %v%$");
 		return formatter;
 	}
 
@@ -28,7 +28,7 @@ namespace lklog {
 	{
 		auto formatter = std::make_unique<spdlog::pattern_formatter>();
 		formatter->add_flag<lklog::internal::level_name_formatter>('L');
-		formatter->set_pattern("[%T] [%-7L] [%n] %v");
+		formatter->set_pattern("[%T] [%L] [%n] %v");
 		return formatter;
 	}
 

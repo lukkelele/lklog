@@ -64,20 +64,13 @@ namespace lklog::internal {
 		static _lklog_module_assigner _lklog_module_assigner_inst; \
 	}
 
-#define _LKLOG_MOD_LOG(_lvl, _fmt, ...)                                                           \
-	do {                                                                                          \
-		const auto* mod = ::lklog::internal::_lklog_module_ptr;                                   \
-		if (mod && _lvl <= mod->lvl) {                                                            \
-			::lklog::internal::log(*mod, _lvl, ::lklog::format(_fmt __VA_OPT__(, ) __VA_ARGS__)); \
-		} else if (mod == nullptr) {                                                              \
-			::lklog::log::print_msg(_lvl, _fmt __VA_OPT__(, ) __VA_ARGS__);                       \
-		}                                                                                         \
+#define _LKLOG_MOD_LOG(_lvl, ...)                                             \
+	do {                                                                      \
+		const auto* mod = ::lklog::internal::_lklog_module_ptr;               \
+		if (mod && _lvl <= mod->lvl) {                                        \
+			::lklog::internal::log(*mod, _lvl, ::lklog::format(__VA_ARGS__)); \
+		} else if (mod == nullptr) {                                          \
+			::lklog::log::print_msg(_lvl, __VA_ARGS__);                       \
+		}                                                                     \
 	} while (0)
-
-#define LKLOG_MOD_TRACE(fmt, ...) _LKLOG_MOD_LOG(::lklog::level::trace, fmt, ##__VA_ARGS__)
-#define LKLOG_MOD_DEBUG(fmt, ...) _LKLOG_MOD_LOG(::lklog::level::debug, fmt, ##__VA_ARGS__)
-#define LKLOG_MOD_INFO(fmt, ...)  _LKLOG_MOD_LOG(::lklog::level::info, fmt, ##__VA_ARGS__)
-#define LKLOG_MOD_WARN(fmt, ...)  _LKLOG_MOD_LOG(::lklog::level::warn, fmt, ##__VA_ARGS__)
-#define LKLOG_MOD_ERROR(fmt, ...) _LKLOG_MOD_LOG(::lklog::level::error, fmt, ##__VA_ARGS__)
-#define LKLOG_MOD_FATAL(fmt, ...) _LKLOG_MOD_LOG(::lklog::level::fatal, fmt, ##__VA_ARGS__)
 

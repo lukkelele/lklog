@@ -15,6 +15,7 @@
 #include "internal/ansi_color.h"
 #include "internal/core.h"
 #include "internal/formatters.h"
+#include "internal/module.h"
 #include "level.h"
 
 namespace lklog {
@@ -108,7 +109,7 @@ namespace lklog {
 		}
 
 	private:
-		static spdlog::logger* get_logger() { return logger_impl.get(); }
+		_LKLOG_FORCEINLINE static spdlog::logger* get_logger() { return logger_impl.get(); }
 
 	private:
 		static inline std::unique_ptr<spdlog::logger> logger_impl;
@@ -119,12 +120,12 @@ namespace lklog {
 #define LKLOG_PRINT(...)            ::lklog::log::print(__VA_ARGS__)
 #define LKLOG_PRINTLN(...)          ::lklog::log::println(__VA_ARGS__)
 
-#define LKLOG_TRACE(...)            ::lklog::log::print_msg(::lklog::level::trace, __VA_ARGS__)
-#define LKLOG_DEBUG(...)            ::lklog::log::print_msg(::lklog::level::debug, __VA_ARGS__)
-#define LKLOG_INFO(...)             ::lklog::log::print_msg(::lklog::level::info, __VA_ARGS__)
-#define LKLOG_WARN(...)             ::lklog::log::print_msg(::lklog::level::warn, __VA_ARGS__)
-#define LKLOG_ERROR(...)            ::lklog::log::print_msg(::lklog::level::error, __VA_ARGS__)
-#define LKLOG_FATAL(...)            ::lklog::log::print_msg(::lklog::level::fatal, __VA_ARGS__)
+#define LKLOG_TRACE(...)            _LKLOG_MOD_LOG(::lklog::level::trace, ##__VA_ARGS__)
+#define LKLOG_DEBUG(...)            _LKLOG_MOD_LOG(::lklog::level::debug, ##__VA_ARGS__)
+#define LKLOG_INFO(...)             _LKLOG_MOD_LOG(::lklog::level::info,  ##__VA_ARGS__)
+#define LKLOG_WARN(...)             _LKLOG_MOD_LOG(::lklog::level::warn,  ##__VA_ARGS__)
+#define LKLOG_ERROR(...)            _LKLOG_MOD_LOG(::lklog::level::error, ##__VA_ARGS__)
+#define LKLOG_FATAL(...)            _LKLOG_MOD_LOG(::lklog::level::fatal, ##__VA_ARGS__)
 
 #define LKLOG_TRACE_TAG(tag, ...)   ::lklog::log::print_msg_with_tag(::lklog::level::trace, tag, __VA_ARGS__)
 #define LKLOG_DEBUG_TAG(tag, ...)   ::lklog::log::print_msg_with_tag(::lklog::level::debug, tag, __VA_ARGS__)
