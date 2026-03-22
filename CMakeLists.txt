@@ -3,9 +3,10 @@ project(lklog LANGUAGES C CXX)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-option(LKLOG_ENABLE_ASSERT "Enable assert" OFF)
+option(LKLOG_ADD_LOG_MACROS "Add log macros (LOG_DEBUG, LOG_INFO, ...)" ON)
 option(LKLOG_BUILD_TESTS "Build tests" ON)
 option(LKLOG_STD_PRINT "Use std::print" ON)
+option(LKLOG_ENABLE_ASSERT "Enable asserts" OFF)
 option(LKLOG_INTERNAL_DEBUG "Enable internal debug logs" OFF)
 
 if (NOT CMAKE_BUILD_TYPE)
@@ -64,12 +65,16 @@ target_include_directories(${LKLOG_TARGET} PRIVATE
 	include/lklog
 )
 
+if (LKLOG_ADD_LOG_MACROS)
+    target_compile_definitions(${LKLOG_TARGET} PUBLIC _LKLOG_LOG_MACROS)
+endif()
+
 if (LKLOG_INTERNAL_DEBUG)
     target_compile_definitions(${LKLOG_TARGET} PRIVATE LKLOG_INTERNAL_DEBUG)
 endif()
 
 if (LKLOG_STD_PRINT)
-    target_compile_definitions(${LKLOG_TARGET} PRIVATE LKLOG_STD_PRINT)
+    target_compile_definitions(${LKLOG_TARGET} PUBLIC _LKLOG_STD_PRINT)
 endif()
 
 
@@ -153,6 +158,7 @@ target_include_directories(${LKLOG_TARGET} PUBLIC ${CMAKE_BINARY_DIR}/intermedia
 # Tests
 #-------------------------------------------------------------------
 if (LKLOG_BUILD_TESTS)
+	set(EXTERNAL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external)
 	add_subdirectory(test)
 endif()
 
