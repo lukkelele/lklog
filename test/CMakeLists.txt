@@ -13,12 +13,19 @@ add_executable(${TEST_TARGET}
 )
 
 if (LKLOG_STD_PRINT)
-    target_compile_definitions(${TEST_TARGET} PRIVATE 
+    target_compile_definitions(${TEST_TARGET} PRIVATE
         LKLOG_STD_PRINT=1
     )
 endif()
 
-target_link_libraries(${TEST_TARGET} PRIVATE lklog::lklog)
+target_link_libraries(${TEST_TARGET} PRIVATE
+    lklog::lklog
+    Catch2::Catch2
+)
+
+target_include_directories(${TEST_TARGET} PRIVATE
+    ${EXTERNAL_DIR}/catch2/src
+)
 
 set_target_properties(${TEST_TARGET} PROPERTIES
 	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${PROJECT_NAME}"
