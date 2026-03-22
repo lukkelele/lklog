@@ -42,6 +42,7 @@ namespace lklog::internal {
 	void log(const log_module& module, level lvl, std::string_view msg);
 }
 
+/* clang-format off */
 #define LKLOG_MODULE_DECLARE(name)                                   \
 	extern const ::lklog::internal::log_module _lklog_module_##name;
 
@@ -73,4 +74,5 @@ namespace lklog::internal {
 			::lklog::log::print_msg(_lvl, __VA_ARGS__);                       \
 		}                                                                     \
 	} while (0)
+/* clang-format on */
 

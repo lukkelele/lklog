@@ -32,6 +32,19 @@ namespace lklog {
 		return formatter;
 	}
 
+	static constexpr spdlog::level::level_enum to_spdlog_level(const level level)
+	{
+		switch (level) {
+			case level::trace: return spdlog::level::trace;
+			case level::debug: return spdlog::level::debug;
+			case level::info:  return spdlog::level::info;
+			case level::warn:  return spdlog::level::warn;
+			case level::error: return spdlog::level::err;
+			case level::fatal: return spdlog::level::critical;
+		}
+		return spdlog::level::info;
+	}
+
 	log::log()
 	{
 		const auto& ctx = internal::context::get();
@@ -44,7 +57,7 @@ namespace lklog {
 		return inst;
 	}
 
-	void log::init(std::string_view logfile)
+	void log::init(level lvl, std::string_view logfile)
 	{
 		get(); /* Make sure instance exists. */
 		auto& ctx = internal::context::get();
@@ -71,21 +84,8 @@ namespace lklog {
 		sinks[1]->set_formatter(create_console_formatter());
 
 		logger_impl = std::make_unique<spdlog::logger>("lklog", sinks.begin(), sinks.end());
-		logger_impl->set_level(spdlog::level::trace);
+		logger_impl->set_level(to_spdlog_level(lvl));
 		logger_impl->flush_on(spdlog::level::trace);
-	}
-
-	static constexpr spdlog::level::level_enum to_spdlog_level(const level level)
-	{
-		switch (level) {
-			case level::trace: return spdlog::level::trace;
-			case level::debug: return spdlog::level::debug;
-			case level::info:  return spdlog::level::info;
-			case level::warn:  return spdlog::level::warn;
-			case level::error: return spdlog::level::err;
-			case level::fatal: return spdlog::level::critical;
-		}
-		return spdlog::level::info;
 	}
 
 	void log::set_level(const level level)

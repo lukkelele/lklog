@@ -4,7 +4,7 @@
 #include <map>
 #include <string>
 
-#ifdef LKLOG_STD_PRINT
+#ifdef _LKLOG_STD_PRINT
 #	include <print>
 #endif
 
@@ -34,13 +34,13 @@ namespace lklog {
 		log& operator=(const log&) = delete;
 
 		static log& get();
-		static void init(std::string_view logfile = "");
+		static void init(level lvl = level::info, std::string_view logfile = "");
 		static void set_level(level level);
 
 		template<typename... Args>
 		static void print(format_string<Args...> fmt, Args&&... args)
 		{
-#ifdef LKLOG_STD_PRINT
+#ifdef _LKLOG_STD_PRINT
 			std::print("{}", lklog::format(fmt, std::forward<Args>(args)...));
 #else
 			const std::string str = lklog::format(fmt, std::forward<Args>(args)...);
@@ -52,7 +52,7 @@ namespace lklog {
 		template<typename... Args>
 		static void println(format_string<Args...> fmt, Args&&... args)
 		{
-#ifdef LKLOG_STD_PRINT
+#ifdef _LKLOG_STD_PRINT
 			std::println("{}", lklog::format(fmt, std::forward<Args>(args)...));
 #else
 			const std::string str = lklog::format(fmt, std::forward<Args>(args)...);
@@ -116,24 +116,41 @@ namespace lklog {
 	};
 }
 
-/* clang-format off */
-#define LKLOG_PRINT(...)            ::lklog::log::print(__VA_ARGS__)
-#define LKLOG_PRINTLN(...)          ::lklog::log::println(__VA_ARGS__)
+#define LKLOG_PRINT(...)   ::lklog::log::print(__VA_ARGS__)
+#define LKLOG_PRINTLN(...) ::lklog::log::println(__VA_ARGS__)
 
-#define LKLOG_TRACE(...)            _LKLOG_MOD_LOG(::lklog::level::trace, ##__VA_ARGS__)
-#define LKLOG_DEBUG(...)            _LKLOG_MOD_LOG(::lklog::level::debug, ##__VA_ARGS__)
-#define LKLOG_INFO(...)             _LKLOG_MOD_LOG(::lklog::level::info,  ##__VA_ARGS__)
-#define LKLOG_WARN(...)             _LKLOG_MOD_LOG(::lklog::level::warn,  ##__VA_ARGS__)
-#define LKLOG_ERROR(...)            _LKLOG_MOD_LOG(::lklog::level::error, ##__VA_ARGS__)
-#define LKLOG_FATAL(...)            _LKLOG_MOD_LOG(::lklog::level::fatal, ##__VA_ARGS__)
+#define LKLOG_TRACE(...) _LKLOG_MOD_LOG(::lklog::level::trace, ##__VA_ARGS__)
+#define LKLOG_DEBUG(...) _LKLOG_MOD_LOG(::lklog::level::debug, ##__VA_ARGS__)
+#define LKLOG_INFO(...)  _LKLOG_MOD_LOG(::lklog::level::info, ##__VA_ARGS__)
+#define LKLOG_WARN(...)  _LKLOG_MOD_LOG(::lklog::level::warn, ##__VA_ARGS__)
+#define LKLOG_ERROR(...) _LKLOG_MOD_LOG(::lklog::level::error, ##__VA_ARGS__)
+#define LKLOG_FATAL(...) _LKLOG_MOD_LOG(::lklog::level::fatal, ##__VA_ARGS__)
 
-#define LKLOG_TRACE_TAG(tag, ...)   ::lklog::log::print_msg_with_tag(::lklog::level::trace, tag, __VA_ARGS__)
-#define LKLOG_DEBUG_TAG(tag, ...)   ::lklog::log::print_msg_with_tag(::lklog::level::debug, tag, __VA_ARGS__)
-#define LKLOG_INFO_TAG(tag, ...)    ::lklog::log::print_msg_with_tag(::lklog::level::info, tag, __VA_ARGS__)
-#define LKLOG_WARN_TAG(tag, ...)    ::lklog::log::print_msg_with_tag(::lklog::level::warn, tag, __VA_ARGS__)
-#define LKLOG_ERROR_TAG(tag, ...)   ::lklog::log::print_msg_with_tag(::lklog::level::error, tag, __VA_ARGS__)
-#define LKLOG_FATAL_TAG(tag, ...)   ::lklog::log::print_msg_with_tag(::lklog::level::fatal, tag, __VA_ARGS__)
-/* clang-format on */
+#define LKLOG_TRACE_TAG(tag, ...) ::lklog::log::print_msg_with_tag(::lklog::level::trace, tag, __VA_ARGS__)
+#define LKLOG_DEBUG_TAG(tag, ...) ::lklog::log::print_msg_with_tag(::lklog::level::debug, tag, __VA_ARGS__)
+#define LKLOG_INFO_TAG(tag, ...)  ::lklog::log::print_msg_with_tag(::lklog::level::info, tag, __VA_ARGS__)
+#define LKLOG_WARN_TAG(tag, ...)  ::lklog::log::print_msg_with_tag(::lklog::level::warn, tag, __VA_ARGS__)
+#define LKLOG_ERROR_TAG(tag, ...) ::lklog::log::print_msg_with_tag(::lklog::level::error, tag, __VA_ARGS__)
+#define LKLOG_FATAL_TAG(tag, ...) ::lklog::log::print_msg_with_tag(::lklog::level::fatal, tag, __VA_ARGS__)
+
+#ifdef _LKLOG_LOG_MACROS
+#	if defined(LOG_TRACE) || defined(LOG_DEBUG) || defined(LOG_INFO) || defined(LOG_ERROR) || defined(LOG_FATAL)
+#		error "Log macros are occupied"
+#	endif
+#	define LOG_TRACE(...) LKLOG_TRACE(__VA_ARGS__)
+#	define LOG_DEBUG(...) LKLOG_DEBUG(__VA_ARGS__)
+#	define LOG_INFO(...)  LKLOG_INFO(__VA_ARGS__)
+#	define LOG_WARN(...)  LKLOG_WARN(__VA_ARGS__)
+#	define LOG_ERROR(...) LKLOG_ERROR(__VA_ARGS__)
+#	define LOG_FATAL(...) LKLOG_FATAL(__VA_ARGS__)
+#
+#	define LOG_TRACE_TAG(_tag, ...) LKLOG_TRACE_TAG(_tag, __VA_ARGS__)
+#	define LOG_DEBUG_TAG(_tag, ...) LKLOG_DEBUG_TAG(_tag, __VA_ARGS__)
+#	define LOG_INFO_TAG(_tag, ...)  LKLOG_INFO_TAG(_tag, __VA_ARGS__)
+#	define LOG_WARN_TAG(_tag, ...)  LKLOG_WARN_TAG(_tag, __VA_ARGS__)
+#	define LOG_ERROR_TAG(_tag, ...) LKLOG_ERROR_TAG(_tag, __VA_ARGS__)
+#	define LOG_FATAL_TAG(_tag, ...) LKLOG_FATAL_TAG(_tag, __VA_ARGS__)
+#endif /* _LK_LOG_MACROS */
 
 #include "internal/log_impl.h"
 
