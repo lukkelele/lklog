@@ -43,21 +43,19 @@
 
 namespace lklog {
 
-	namespace internal {
 #ifdef SPDLOG_USE_STD_FORMAT
-		namespace fmt = ::std;
+	namespace fmt = ::std;
 #else
-		namespace fmt = ::fmt;
+	namespace fmt = ::fmt;
 #endif
-	}
 
 	template<typename... Args>
-	using format_string = internal::fmt::format_string<Args...>;
+	using format_string = fmt::format_string<Args...>;
 
 	template<typename... Args>
 	inline std::string format(format_string<Args...> fmt, Args&&... args)
 	{
-		return internal::fmt::format(fmt, std::forward<Args>(args)...);
+		return fmt::format(fmt, std::forward<Args>(args)...);
 	}
 }
 
