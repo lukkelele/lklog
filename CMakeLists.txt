@@ -56,9 +56,9 @@ set(SOURCE_FILES
 	src/utility.cpp
 )
 
-set(LKLOG_TARGET ${PROJECT_NAME}-static)
+set(LKLOG_TARGET ${PROJECT_NAME})
 add_library(${LKLOG_TARGET} STATIC ${SOURCE_FILES})
-add_library(lklog::lklog ALIAS ${LKLOG_TARGET})
+add_library(lklog:lklog ALIAS ${LKLOG_TARGET})
 target_sources(${LKLOG_TARGET} PRIVATE ${HEADER_FILES})
 target_include_directories(${LKLOG_TARGET} PUBLIC include)
 target_include_directories(${LKLOG_TARGET} PRIVATE
@@ -86,6 +86,7 @@ if (MSVC)
 		_CRT_SECURE_NO_WARNINGS
 	)
 	target_compile_definitions(${LKLOG_TARGET} PUBLIC
+		SPDLOG_USE_STD_FORMAT
 		_LKLOG_COMPILER_MSVC
 		_LKLOG_VA_OPT # /Zc:preprocessor
 	)
@@ -132,6 +133,7 @@ endif()
 #-------------------------------------------------------------------
 # Dependencies.
 #-------------------------------------------------------------------
+set(SPDLOG_FOUND ON)
 add_subdirectory(external)
 target_include_directories(${LKLOG_TARGET} PUBLIC
 	external/spdlog/include
@@ -158,6 +160,8 @@ target_include_directories(${LKLOG_TARGET} PUBLIC ${CMAKE_BINARY_DIR}/intermedia
 # Tests
 #-------------------------------------------------------------------
 if (LKLOG_BUILD_TESTS)
+	# TODO: Should check if Catch2 is present in current project
+	find_package(Catch2 REQUIRED)
 	set(EXTERNAL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external)
 	add_subdirectory(test)
 endif()
