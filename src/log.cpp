@@ -72,16 +72,9 @@ namespace lklog {
 		internal::clean_log_dir(ctx.log_directory, 2);
 
 		std::vector<spdlog::sink_ptr> sinks = {
-			std::make_shared<spdlog::sinks::basic_file_sink_mt>(ctx.logfile, true),
 			std::make_shared<spdlog::sinks::stdout_color_sink_mt>()
 		};
-
-		/**
-		 * Index 0: file
-		 * Index 1: stdout
-		 */
-		sinks[0]->set_formatter(create_file_formatter());
-		sinks[1]->set_formatter(create_console_formatter());
+		sinks[0]->set_formatter(create_console_formatter());
 
 		logger_impl = std::make_unique<spdlog::logger>("lklog", sinks.begin(), sinks.end());
 		logger_impl->set_level(to_spdlog_level(lvl));

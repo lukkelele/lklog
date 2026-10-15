@@ -27,7 +27,6 @@ namespace lklog::internal {
 	{
 		namespace fs = std::filesystem;
 		if (!fs::exists(dir) || !fs::is_directory(dir)) {
-			LKLOG_ASSERT(false, "Invalid directory");
 			return 0;
 		}
 
@@ -45,7 +44,6 @@ namespace lklog::internal {
 	{
 		namespace fs = std::filesystem;
 		if (!fs::exists(dir) || !fs::is_directory(dir)) {
-			LKLOG_ASSERT(false, "Invalid directory");
 			return;
 		}
 
